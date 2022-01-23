@@ -1,0 +1,38 @@
+[
+  {
+    "device": "DEVICE1",
+    "Voltage": "000",
+    "ConsumptionCurrent": "00",
+    "LeakageCurrent": "00.0",
+    "Temperature": "+00",
+    "Humidity": "00",
+    "Relay": [true, false, false, false, false]
+  },
+  {
+    "device": "DEVICE2",
+    "Voltage": "000",
+    "ConsumptionCurrent": "00",
+    "LeakageCurrent": "00.0",
+    "Temperature": "+00",
+    "Humidity": "00",
+    "Relay": [true, false, false, false, false]
+  },
+  {
+    "device": "DEVICE3",
+    "Voltage": "000",
+    "ConsumptionCurrent": "00",
+    "LeakageCurrent": "00.0",
+    "Temperature": "+00",
+    "Humidity": "00",
+    "Relay": [true, false, false, false, false]
+  },
+  {
+    "device": "DEVICE5",
+    "Voltage": "000",
+    "ConsumptionCurrent": "00",
+    "LeakageCurrent": "00.0",
+    "Temperature": "+00",
+    "Humidity": "00",
+    "Relay": [true, false, false, false, false]
+  }
+]
