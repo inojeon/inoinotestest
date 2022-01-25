@@ -1,8 +1,10 @@
-import { title } from "process";
 import CurrentTime from "../components/currentTime";
-import Gauge from "../components/gauge";
 import RelaySwitch from "../components/switch";
 import VoltGauge from "../components/voltGauge";
+
+import socketIOClient from "socket.io-client";
+import { useEffect, useState } from "react";
+const ENDPOINT = "http://127.0.0.1:4001";
 
 const device1 = {
   name: "Device1",
@@ -42,9 +44,22 @@ const device1 = {
 };
 
 const Home = () => {
-  console.log(device1);
+  const [response, setResponse] = useState("");
+
+  useEffect(() => {
+    const socket = socketIOClient(ENDPOINT);
+    socket.on("FromAPI", (data) => {
+      setResponse(data);
+    });
+  }, []);
+  // console.log(device1);
   return (
     <div className="flex flex-col items-center text-white">
+      <div>
+        <p>
+          It <time dateTime={response}>{response}</time>
+        </p>
+      </div>
       <h1 className=" text-2xl m-2">One Sound - Dashboard</h1>
       <CurrentTime />
       <div className="m-2 p-4 border-2 w-full">

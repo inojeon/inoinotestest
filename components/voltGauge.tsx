@@ -1,5 +1,4 @@
 import GaugeChart from "react-gauge-chart";
-import ReactSpeedometer from "react-d3-speedometer";
 type Prop = {
   id: string;
   value: number;
@@ -37,11 +36,16 @@ const minMax: PropMinMax[] = [
 ];
 
 const VoltGauge = ({ id, value, unit, title }: Prop) => {
-  const { min, max } = minMax.find((element) => element.unit === unit);
-  // console.log(current);
+  const tmpMinMax = minMax.find((element) => element.unit === unit);
+  let min, max;
+  if (tmpMinMax) {
+    min = tmpMinMax.min;
+    max = tmpMinMax.max;
+  } else {
+    min = 0;
+    max = 100;
+  }
   const percent = (value - min) / (max - min);
-  // const percent = 4;
-  console.log("percent", percent, "value", value);
   return (
     <div className="flex flex-col items-center my-4">
       <h1 className="text-2xl">{title}</h1>
@@ -52,7 +56,6 @@ const VoltGauge = ({ id, value, unit, title }: Prop) => {
         percent={percent}
         viewValue={value}
       />
-      {/* <ReactSpeedometer minValue={min} maxValue={max} value={value} /> */}
     </div>
   );
 };
