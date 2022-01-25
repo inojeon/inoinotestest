@@ -4,7 +4,8 @@ import VoltGauge from "../components/voltGauge";
 
 import socketIOClient from "socket.io-client";
 import { useEffect, useState } from "react";
-const ENDPOINT = "http://localhost:4001";
+const ENDPOINT =
+  "http://ec2-15-164-245-6.ap-northeast-2.compute.amazonaws.com:4001";
 
 const device1 = {
   name: "Device1",
