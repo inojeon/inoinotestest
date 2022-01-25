@@ -4,7 +4,7 @@ import VoltGauge from "../components/voltGauge";
 
 import socketIOClient from "socket.io-client";
 import { useEffect, useState } from "react";
-const ENDPOINT = "http://127.0.0.1:4001";
+const ENDPOINT = "http://localhost:4001";
 
 const device1 = {
   name: "Device1",
