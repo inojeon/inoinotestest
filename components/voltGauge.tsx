@@ -2,8 +2,6 @@ import GaugeChart from "react-gauge-chart";
 type Prop = {
   id: string;
   value: number;
-  unit: string;
-  title: string;
 };
 
 type PropMinMax = {
@@ -24,7 +22,7 @@ const minMax: PropMinMax[] = [
     max: 32,
   },
   {
-    unit: "°C",
+    unit: "ㅊ",
     min: -20,
     max: 100,
   },
@@ -35,7 +33,36 @@ const minMax: PropMinMax[] = [
   },
 ];
 
-const VoltGauge = ({ id, value, unit, title }: Prop) => {
+// const valuePercentfilter = (value: number, max: number, min: number) => {
+//   if (value < max) {
+//     if (value > min) {
+//       return value;
+//     } else {
+//       return min;
+//     }
+//   } else {
+//     return max;
+//   }ㅊ
+// };
+const checkUnit = (id: string): { unit: string; title: string } => {
+  const type = id.split("_")[0];
+  if (type === "Voltage") {
+    return { unit: "V", title: "전압" };
+  } else if (type === "ConsumptionCurrent") {
+    return { unit: "A", title: "현재전류" };
+  } else if (type === "LeakageCurrent") {
+    return { unit: "A", title: "누설전류" };
+  } else if (type === "Temperature") {
+    return { unit: "°C", title: "온도" };
+  } else if (type === "Humidity") {
+    return { unit: "%", title: "습도" };
+  } else {
+    return { unit: "%", title: "" };
+  }
+};
+
+const VoltGauge = ({ id, value }: Prop) => {
+  const { unit, title } = checkUnit(id);
   const tmpMinMax = minMax.find((element) => element.unit === unit);
   let min, max;
   if (tmpMinMax) {
@@ -45,7 +72,9 @@ const VoltGauge = ({ id, value, unit, title }: Prop) => {
     min = 0;
     max = 100;
   }
-  const percent = (value - min) / (max - min);
+
+  const viewValue = value > max ? max : value < min ? min : value;
+  const percent = (viewValue - min) / (max - min);
   return (
     <div className="flex flex-col items-center my-4">
       <h1 className="text-2xl">{title}</h1>

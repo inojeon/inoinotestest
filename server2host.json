@@ -1,0 +1,23 @@
+[
+  {
+	"device":"DEVICE1",
+	"order" : 1,
+	"value" : false
+  },{
+    "device":"DEVICE2",
+	"order" : 1,
+	"value" : false
+  },{
+    "device":"DEVICE3",
+	"order" : 1,
+	"value" : false
+  },{
+    "device":"DEVICE4",
+	"order" : 1,
+	"value" : false
+  },{
+    "device":"DEVICE5",
+	"order" : 1,
+	"value" : false
+  }
+]

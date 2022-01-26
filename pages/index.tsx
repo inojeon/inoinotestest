@@ -4,8 +4,68 @@ import VoltGauge from "../components/voltGauge";
 
 import socketIOClient from "socket.io-client";
 import { useEffect, useState } from "react";
+
+const tmphost2Server = [
+  {
+    device: "DEVICE1",
+    CommStatus: false,
+    Voltage: 250,
+    ConsumptionCurrent: 0,
+    LeakageCurrent: 0.0,
+    Temperature: 0,
+    Humidity: 0,
+    Alarm: 1,
+    Relay: [false, false, false, false, false],
+  },
+  {
+    device: "DEVICE2",
+    CommStatus: false,
+    Voltage: 0,
+    ConsumptionCurrent: 0,
+    LeakageCurrent: 0.0,
+    Temperature: 0,
+    Humidity: 0,
+    Alarm: 0,
+    Relay: [false, false, false, false, false],
+  },
+  {
+    device: "DEVICE3",
+    CommStatus: false,
+    Voltage: 0,
+    ConsumptionCurrent: 0,
+    LeakageCurrent: 0.0,
+    Temperature: 0,
+    Humidity: 0,
+    Alarm: 0,
+    Relay: [false, false, false, false, false],
+  },
+  {
+    device: "DEVICE4",
+    CommStatus: false,
+    Voltage: 0,
+    ConsumptionCurrent: 0,
+    LeakageCurrent: 0.0,
+    Temperature: 0,
+    Humidity: 0,
+    Alarm: 0,
+    Relay: [false, false, false, false, false],
+  },
+  {
+    device: "DEVICE5",
+    CommStatus: false,
+    Voltage: 0,
+    ConsumptionCurrent: 0,
+    LeakageCurrent: 0.0,
+    Temperature: 0,
+    Humidity: 0,
+    Alarm: 0,
+    Relay: [false, false, false, false, false],
+  },
+];
+
 const ENDPOINT =
   "http://ec2-15-164-245-6.ap-northeast-2.compute.amazonaws.com:4001";
+// const ENDPOINT = "http://localhost:4001";
 
 const device1 = {
   name: "Device1",
@@ -13,7 +73,7 @@ const device1 = {
     {
       id: "device1-sensor0",
       unit: "V",
-      value: 120,
+      value: 10,
       title: "전압",
     },
     {
@@ -46,14 +106,45 @@ const device1 = {
 
 const Home = () => {
   const [response, setResponse] = useState("");
+  const [hostJeonData, setHostJeonData] = useState(tmphost2Server);
 
   useEffect(() => {
     const socket = socketIOClient(ENDPOINT);
     socket.on("FromAPI", (data) => {
       setResponse(data);
+      setHostJeonData(JSON.parse(data));
     });
   }, []);
-  // console.log(device1);
+  console.log(device1);
+  const alarmCheck = (alarm: number) => {
+    let massage = "";
+    switch (alarm) {
+      case 0:
+        massage = "알람이 없습니다";
+        break;
+      case 1:
+        massage = "전압 문제발생";
+        break;
+      case 2:
+        massage = "현재전류 문제발생";
+        break;
+      case 3:
+        massage = "누설전류 문제발생";
+        break;
+      case 4:
+        massage = "온도 문제발생";
+        break;
+      case 5:
+        massage = "습도 문제발생";
+        break;
+
+      default:
+        massage = "알람 신호 이상";
+        break;
+    }
+    return massage;
+  };
+
   return (
     <div className="flex flex-col items-center text-white">
       <div>
@@ -63,7 +154,60 @@ const Home = () => {
       </div>
       <h1 className=" text-2xl m-2">One Sound - Dashboard</h1>
       <CurrentTime />
-      <div className="m-2 p-4 border-2 w-full">
+
+      {hostJeonData.map((device, key) => (
+        <div
+          className="m-2 border-2 w-full grid grid-cols-2 border-slate-300 border-b-2"
+          key={key}
+        >
+          <div className="mx-4 my-2 col-span-2 ">
+            <h1 className="text-3xl mb-2">{device.device}</h1>
+          </div>
+          <div className="mx-4 col-span-2 grid grid-cols-2 border-slate-300 border-b-2 border-dashed">
+            <h2 className="text-xl mb-2">
+              {" "}
+              통신상태 : {device.CommStatus ? "에러" : "정상"}
+            </h2>
+            <h2 className="text-xl mb-2"> 알람 : {alarmCheck(device.Alarm)}</h2>
+          </div>
+
+          <div className="">
+            <VoltGauge id={`Voltage_${device.device}`} value={device.Voltage} />
+          </div>
+          <div className="">
+            <VoltGauge
+              id={`ConsumptionCurrent_${device.device}`}
+              value={device.ConsumptionCurrent}
+            />
+          </div>
+          <div className="">
+            <VoltGauge
+              id={`LeakageCurrent_${device.device}`}
+              value={device.LeakageCurrent}
+            />
+          </div>
+          <div className="">
+            <VoltGauge
+              id={`Temperature_${device.device}`}
+              value={device.Temperature}
+            />
+          </div>
+          <div className="">
+            <VoltGauge
+              id={`Humidity_${device.device}`}
+              value={device.Humidity}
+            />
+          </div>
+          <div className="row-span-2">
+            <h1 className="text-2xl text-center">Relay</h1>
+            {device.Relay.map((relay, key) => (
+              <h3 key={key}>{`Relay ${key} : ${relay ? "온" : "오프"}`}</h3>
+            ))}
+          </div>
+        </div>
+      ))}
+
+      {/* <div className="m-2 p-4 border-2 w-full">
         <h1 className="text-3xl mb-2">{device1.name}</h1>
         <span>정상</span>
 
@@ -87,7 +231,7 @@ const Home = () => {
             // <span key={key}>aa</span>
           ))}
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

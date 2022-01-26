@@ -1,0 +1,53 @@
+[
+  {
+    "device": "DEVICE1",
+    "CommStatus": false,
+    "Voltage": 0,
+    "ConsumptionCurrent": 0,
+    "LeakageCurrent": 0.0,
+    "Temperature": 0,
+    "Humidity": 0,
+	"Alarm": 0,
+    "Relay": [false, false, false, false, false]
+  },{
+    "device": "DEVICE2",
+    "CommStatus": false,
+    "Voltage": 0,
+    "ConsumptionCurrent": 0,
+    "LeakageCurrent": 0.0,
+    "Temperature": 0,
+    "Humidity": 0,
+	"Alarm": 0,
+    "Relay": [false, false, false, false, false]
+  },{
+    "device": "DEVICE3",
+    "CommStatus": false,
+    "Voltage": 0,
+    "ConsumptionCurrent": 0,
+    "LeakageCurrent": 0.0,
+    "Temperature": 0,
+    "Humidity": 0,
+	"Alarm": 0,
+    "Relay": [false, false, false, false, false]
+  },{
+    "device": "DEVICE4",
+    "CommStatus": false,
+    "Voltage": 0,
+    "ConsumptionCurrent": 0,
+    "LeakageCurrent": 0.0,
+    "Temperature": 0,
+    "Humidity": 0,
+	"Alarm": 0,
+    "Relay": [false, false, false, false, false]
+  },{
+    "device": "DEVICE5",
+    "CommStatus": false,
+    "Voltage": 0,
+    "ConsumptionCurrent": 0,
+    "LeakageCurrent": 0.0,
+    "Temperature": 0,
+    "Humidity": 0,
+	"Alarm": 0,
+    "Relay": [false, false, false, false, false]
+  }
+]
