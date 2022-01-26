@@ -147,11 +147,6 @@ const Home = () => {
 
   return (
     <div className="flex flex-col items-center text-white">
-      <div>
-        <p>
-          It <time dateTime={response}>{response}</time>
-        </p>
-      </div>
       <h1 className=" text-2xl m-2">One Sound - Dashboard</h1>
       <CurrentTime />
 
@@ -206,32 +201,11 @@ const Home = () => {
           </div>
         </div>
       ))}
-
-      {/* <div className="m-2 p-4 border-2 w-full">
-        <h1 className="text-3xl mb-2">{device1.name}</h1>
-        <span>정상</span>
-
-        <div className="grid grid-cols-2">
-          {device1.sensors.map((sensor) => (
-            <div className="" key={sensor.id}>
-              <VoltGauge
-                id={sensor.id}
-                unit={sensor.unit}
-                value={sensor.value}
-                title={sensor.title}
-              />
-            </div>
-          ))}
-        </div>
-        <div className="grid grid-cols-5 text-center">
-          {device1.relays.map((relay, key) => (
-            <div key={key}>
-              <RelaySwitch title={key.toString()} value={relay} />
-            </div>
-            // <span key={key}>aa</span>
-          ))}
-        </div>
-      </div> */}
+      <div>
+        <p>
+          <time dateTime={response}>{response}</time>
+        </p>
+      </div>
     </div>
   );
 };
