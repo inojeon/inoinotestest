@@ -68,43 +68,6 @@ const ENDPOINT =
   "http://ec2-15-164-245-6.ap-northeast-2.compute.amazonaws.com:4001";
 // const ENDPOINT = "http://localhost:4001";
 
-const device1 = {
-  name: "Device1",
-  sensors: [
-    {
-      id: "device1-sensor0",
-      unit: "V",
-      value: 10,
-      title: "전압",
-    },
-    {
-      id: "device1-sensor1",
-      unit: "A",
-      value: 12.3,
-      title: "누선전류",
-    },
-    {
-      id: "device1-sensor2",
-      unit: "A",
-      value: 4.2,
-      title: "소비전류",
-    },
-    {
-      id: "device1-sensor3",
-      unit: "°C",
-      value: 32,
-      title: "온도",
-    },
-    {
-      id: "device1-sensor4",
-      unit: "%",
-      value: 68,
-      title: "습도",
-    },
-  ],
-  relays: [false, true, false, false, false],
-};
-
 const Home = () => {
   const [response, setResponse] = useState("");
   const [hostJeonData, setHostJeonData] = useState(tmphost2Server);
@@ -112,12 +75,12 @@ const Home = () => {
   useEffect(() => {
     const socket = socketIOClient(ENDPOINT);
     socket.on("FromAPI", (data) => {
-      setResponse(data);
+      setResponse(JSON.parse(JSON.stringify(data)));
       setHostJeonData(JSON.parse(data));
     });
   }, []);
 
-  console.log(device1);
+  // console.log(device1);
   const alarmCheck = (alarm: number) => {
     let massage = "";
     switch (alarm) {
