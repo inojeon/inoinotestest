@@ -76,7 +76,7 @@ const VoltGauge = ({ id, value }: Prop) => {
   const viewValue = value > max ? max : value < min ? min : value;
   const percent = (viewValue - min) / (max - min);
   return (
-    <div className="flex flex-col items-center my-4">
+    <div className="flex flex-col items-center mb-2">
       <h1 className="text-2xl">{title}</h1>
       <GaugeChart
         id={id}

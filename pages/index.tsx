@@ -4,18 +4,19 @@ import VoltGauge from "../components/voltGauge";
 
 import socketIOClient from "socket.io-client";
 import { useEffect, useState } from "react";
+import Relay from "../components/relay";
 
 const tmphost2Server = [
   {
     device: "DEVICE1",
     CommStatus: false,
-    Voltage: 250,
+    Voltage: 0,
     ConsumptionCurrent: 0,
     LeakageCurrent: 0.0,
     Temperature: 0,
     Humidity: 0,
     Alarm: 1,
-    Relay: [false, false, false, false, false],
+    Relay: [true, false, true, false, false],
   },
   {
     device: "DEVICE2",
@@ -115,6 +116,7 @@ const Home = () => {
       setHostJeonData(JSON.parse(data));
     });
   }, []);
+
   console.log(device1);
   const alarmCheck = (alarm: number) => {
     let massage = "";
@@ -155,18 +157,19 @@ const Home = () => {
           className="m-2 border-2 w-full grid grid-cols-2 border-slate-300 border-b-2"
           key={key}
         >
-          <div className="mx-4 my-2 col-span-2 ">
+          {/* <div className="mx-4 my-2 col-span-2 ">
             <h1 className="text-3xl mb-2">{device.device}</h1>
-          </div>
-          <div className="mx-4 col-span-2 grid grid-cols-2 border-slate-300 border-b-2 border-dashed">
-            <h2 className="text-xl mb-2">
+          </div> */}
+          <div className="mx-4 col-span-1 mt-2">
+            <h1 className="text-2xl mb-2">{device.device}</h1>
+            <h2 className="text-md mb-2">
               {" "}
               통신상태 : {device.CommStatus ? "에러" : "정상"}
             </h2>
-            <h2 className="text-xl mb-2"> 알람 : {alarmCheck(device.Alarm)}</h2>
+            <h2 className="text-md mb-2"> 알람 : {alarmCheck(device.Alarm)}</h2>
           </div>
 
-          <div className="">
+          <div className="mt-2">
             <VoltGauge id={`Voltage_${device.device}`} value={device.Voltage} />
           </div>
           <div className="">
@@ -193,18 +196,20 @@ const Home = () => {
               value={device.Humidity}
             />
           </div>
-          <div className="row-span-2">
-            <h1 className="text-2xl text-center">Relay</h1>
-            {device.Relay.map((relay, key) => (
-              <h3 key={key}>{`Relay ${key} : ${relay ? "온" : "오프"}`}</h3>
-            ))}
+          <div className="col-span-2">
+            <h1 className="text-2xl text-center p-2">Relay</h1>
+            <div className="w-full flex">
+              <Relay
+                relays={device.Relay}
+                ENDPOINT={ENDPOINT}
+                device={device.device}
+              />
+            </div>
           </div>
         </div>
       ))}
       <div>
-        <p>
-          <time dateTime={response}>{response}</time>
-        </p>
+        <p>{response}</p>
       </div>
     </div>
   );
