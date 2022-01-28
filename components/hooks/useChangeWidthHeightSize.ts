@@ -5,7 +5,9 @@ function useChangeWidthHeightSize() {
   // Initialize state with undefined width/height so server and client renders match
   // Learn more here: https://joshwcomeau.com/react/the-perils-of-rehydration/
   const [widthSize, setWidthSize] = useState(
-    typeof window !== "undefined" ? JSON.parse(window.innerWidth) : null
+    typeof window !== "undefined"
+      ? JSON.parse(window.innerWidth.toString())
+      : null
   );
   // window.innerWidth);
   const [width, setWidth] = useState(180);
