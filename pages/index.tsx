@@ -123,7 +123,7 @@ const Home = () => {
           />
         </div>
         <h1 className=" text-2xl m-2 text-center">
-          OneSoundTech - OLoRa System
+          <span className="md:hidden">OneSoundTech - </span>OLoRa System
         </h1>
         <div className="flex-auto flex justify-center md:justify-end items-center md:pr-4">
           <CurrentTime />

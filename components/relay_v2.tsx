@@ -23,7 +23,7 @@ const NewRelay = ({ relays, ENDPOINT, device }: Prop) => {
 
   return (
     <div className="grid grid-cols-7 items-center w-full gap-y-2 gap-x-2 my-2 md:grid-cols-7">
-      <h1 className="col-span-2 text-2xl text-center ml-4 mr-10 md:mr-2 md:ml-2 md:col-span-1">
+      <h1 className="col-span-2 text-2xl text-center sm:ml-4 sm:mr-10 md:mr-2 md:ml-2 md:col-span-1">
         전원제어
       </h1>
       <div className="col-span-5 flex flex-wrap w-full md:col-span-6">
