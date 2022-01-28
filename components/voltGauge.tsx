@@ -68,7 +68,7 @@ const checkUnit = (id: string): { unit: string; title: string } => {
   if (type === "Voltage") {
     return { unit: "V", title: "전압" };
   } else if (type === "ConsumptionCurrent") {
-    return { unit: "A", title: "현재전류" };
+    return { unit: "A", title: "소비전류" };
   } else if (type === "LeakageCurrent") {
     return { unit: "A", title: "누설전류" };
   } else if (type === "Temperature") {
@@ -104,11 +104,15 @@ const VoltGauge = ({ id, value }: Prop) => {
 
   const viewValue = value > max ? max : value < min ? min : value;
   const percent = (viewValue - min) / (max - min);
-  const textColor =
-    viewValue >= alertMin && viewValue <= alertMax ? "#FFFFFF" : "#EA4228";
+  const isNotAlert = viewValue >= alertMin && viewValue <= alertMax;
+  const textColor = isNotAlert ? "#FFFFFF" : "#EA4228";
 
   return (
-    <div className="flex flex-col items-center mb-2 justify-center">
+    <div
+      className={`flex flex-col items-center mb-2 justify-center  ${
+        isNotAlert ? "" : "text-red-500"
+      }`}
+    >
       <h1 className="text-lg mb-2">{title}</h1>
       <GaugeChart
         style={chartStyle}

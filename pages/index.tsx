@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import useSWR from "swr";
 import StatusLED from "../components/status";
 import NewRelay from "../components/relay_v2";
+import StatusLEDFire from "../components/statusFire";
+import Image from "next/image";
 
 const tmphost2Server = [
   {
@@ -83,9 +85,9 @@ type jsonDataProps = {
   Relay: boolean[];
 };
 
-const ENDPOINT =
-  "http://ec2-15-164-245-6.ap-northeast-2.compute.amazonaws.com:4001";
-// const ENDPOINT = "http://localhost:4001";
+// const ENDPOINT =
+//   "http://ec2-15-164-245-6.ap-northeast-2.compute.amazonaws.com:4001";
+const ENDPOINT = "http://localhost:4001";
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const Home = () => {
@@ -95,7 +97,7 @@ const Home = () => {
     `${ENDPOINT}/api/monitoring`,
     fetcher,
     {
-      refreshInterval: 1000,
+      refreshInterval: 200,
     }
   );
 
@@ -111,8 +113,22 @@ const Home = () => {
 
   return (
     <div className="flex flex-col items-center text-white max-w-6xl mx-auto">
-      <h1 className=" text-2xl m-2">OneSoundTech - Dashboard</h1>
-      <CurrentTime />
+      <div className="md:m-2 w-full flex flex-col md:flex-row md:justify-end">
+        <div className="md:flex-auto hidden md:flex md:justify-start md:items-center md:pl-4">
+          <Image
+            src="/logo.png"
+            alt="Landscape picture"
+            width={227}
+            height={50}
+          />
+        </div>
+        <h1 className=" text-2xl m-2 text-center">
+          OneSoundTech - OLoRa System
+        </h1>
+        <div className="flex-auto flex justify-center md:justify-end items-center md:pr-4">
+          <CurrentTime />
+        </div>
+      </div>
 
       {hostJeonData.map((device, key) => (
         <div
@@ -131,7 +147,7 @@ const Home = () => {
             </div>
             <div className="flex gap-x-2 items-center">
               <h2 className="text-md"> 화재경보</h2>
-              <StatusLED status={device.FireStatus} />
+              <StatusLEDFire status={device.FireStatus} />
             </div>
           </div>
 

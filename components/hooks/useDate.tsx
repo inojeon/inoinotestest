@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 export const useDate = () => {
-  const locale = "kr";
+  const locale = "en";
   const [today, setDate] = useState(new Date()); // Save the current date to be able to trigger an update
 
   useEffect(() => {
@@ -15,17 +15,17 @@ export const useDate = () => {
     };
   }, []);
 
-  const day = today.toLocaleDateString(locale, { weekday: "long" });
+  const day = today.toLocaleDateString(locale, { weekday: "short" });
   const year = `${today.toLocaleDateString(locale, {
     year: "numeric",
   })}`;
   const date = `${today.toLocaleDateString(locale, {
-    month: "long",
-  })} ${today.getDate()}일  ${day}`;
+    month: "numeric",
+  })}/${today.getDate()} ${day.toUpperCase()}`;
 
   const time = today.toLocaleTimeString(locale, {
     hour: "numeric",
-    hour12: true,
+    hour12: false,
     minute: "numeric",
     second: "numeric",
   });

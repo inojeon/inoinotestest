@@ -30,7 +30,7 @@ function useChangeWidthHeightSize() {
         setHeight(60);
       } else if (window.innerWidth >= 768 && window.innerWidth < 928) {
         setWidth(160);
-        setHeight(60);
+        setHeight(50);
       } else {
         setWidth(200);
         setHeight(80);
