@@ -85,9 +85,9 @@ type jsonDataProps = {
   Relay: boolean[];
 };
 
-const ENDPOINT =
-  "http://ec2-15-164-245-6.ap-northeast-2.compute.amazonaws.com:4001";
-// const ENDPOINT = "http://localhost:4001";
+// const ENDPOINT =
+//   "http://ec2-15-164-245-6.ap-northeast-2.compute.amazonaws.com:4001";
+const ENDPOINT = "http://localhost:4001";
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const Home = () => {
@@ -97,7 +97,7 @@ const Home = () => {
     `${ENDPOINT}/api/monitoring`,
     fetcher,
     {
-      refreshInterval: 200,
+      refreshInterval: 500,
     }
   );
 

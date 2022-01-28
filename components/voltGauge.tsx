@@ -110,7 +110,7 @@ const VoltGauge = ({ id, value }: Prop) => {
   return (
     <div
       className={`flex flex-col items-center mb-2 justify-center  ${
-        isNotAlert ? "" : "text-red-500"
+        isNotAlert ? "" : "text-red-500 font-extrabold"
       }`}
     >
       <h1 className="text-lg mb-2">{title}</h1>
