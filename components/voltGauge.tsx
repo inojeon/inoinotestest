@@ -10,28 +10,56 @@ type PropMinMax = {
   unit: string;
   min: number;
   max: number;
+  alertMin: number;
+  alertMax: number;
+  arcsLength: number[];
+  colors: string[];
 };
+
+/*
+전압값 MAX: 230V
+전압값 MIN: 190V
+전류값 MAX: 16A (ConsumptionCurent)
+온도 MAX: 70도씨
+습도 MAX: 80%
+*/
 
 const minMax: PropMinMax[] = [
   {
     unit: "V",
     min: 90,
     max: 250,
+    alertMin: 190,
+    alertMax: 230,
+    arcsLength: [0.625, 0.25, 0.125],
+    colors: ["#EA4228", "#5BE12C", "#EA4228"],
   },
   {
     unit: "A",
     min: 0,
     max: 32,
+    alertMin: 0,
+    alertMax: 16,
+    arcsLength: [0.5, 0.5],
+    colors: ["#5BE12C", "#EA4228"],
   },
   {
-    unit: "ㅊ",
+    unit: "°C",
     min: -20,
     max: 100,
+    alertMin: -20,
+    alertMax: 70,
+    arcsLength: [0.75, 0.25],
+    colors: ["#5BE12C", "#EA4228"],
   },
   {
     unit: "%",
     min: 0,
     max: 100,
+    alertMin: 0,
+    alertMax: 80,
+    arcsLength: [0.8, 0.2],
+    colors: ["#5BE12C", "#EA4228"],
   },
 ];
 
@@ -57,33 +85,43 @@ const VoltGauge = ({ id, value }: Prop) => {
   const chartStyle = useChangeWidthHeightSize();
 
   const tmpMinMax = minMax.find((element) => element.unit === unit);
-  let min, max;
+  let min, max, colors, arcsLength, alertMin, alertMax;
   if (tmpMinMax) {
     min = tmpMinMax.min;
     max = tmpMinMax.max;
+    arcsLength = tmpMinMax.arcsLength;
+    colors = tmpMinMax.colors;
+    alertMin = tmpMinMax.alertMin;
+    alertMax = tmpMinMax.alertMax;
   } else {
     min = 0;
+    alertMin = 0;
+    alertMax = 100;
     max = 100;
+    arcsLength = [0.5, 0.5];
+    colors = ["#5BE12C", "#EA4228"];
   }
 
   const viewValue = value > max ? max : value < min ? min : value;
   const percent = (viewValue - min) / (max - min);
-  // const chartStyle = {
-  //   height: 80,
-  //   width: 180,
-  // };
+  const textColor =
+    viewValue >= alertMin && viewValue <= alertMax ? "#FFFFFF" : "#EA4228";
 
   return (
     <div className="flex flex-col items-center mb-2 justify-center">
-      <h1 className="text-2xl mb-2">{title}</h1>
+      <h1 className="text-lg mb-2">{title}</h1>
       <GaugeChart
         style={chartStyle}
         id={id}
-        nrOfLevels={5}
         formatTextValue={(val) => val + " " + unit}
         percent={percent}
         viewValue={value}
         animate={false}
+        arcsLength={arcsLength}
+        colors={colors}
+        textColor={textColor}
+        // animDelay={500}
+        // animateDuration={1000}
       />
     </div>
   );

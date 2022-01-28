@@ -6,8 +6,8 @@ const CurrentTime: NextPage = () => {
 
   return (
     <div className="flex flex-col w-full items-center">
-      <h1>{`${year} ${date}`}</h1>
-      <h1>{`${time}`}</h1>
+      <h1>{`${year} ${date} - ${time}`}</h1>
+      {/* <h1>{`${time}`}</h1> */}
     </div>
   );
 };

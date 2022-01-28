@@ -30,29 +30,29 @@ const NewRelay = ({ relays, ENDPOINT, device }: Prop) => {
         {relays.map((relay, key) => (
           <div key={key} className="flex gap-x-2 px-2 py-2">
             <div className="flex items-center">
-              <p className="text-center text-lg w-8"> {key}번 </p>
+              <p className="text-center text-lg w-8"> {key + 1}번 </p>
             </div>
 
             {relay ? (
               <div className="flex justify-center items-center ">
-                <button className="w-5 h-5 uppercase p-1 flex items-center border border-red-500 bg-red-500 max-w-max shadow-lg rounded-full">
+                <span className="w-5 h-5 uppercase p-1 flex items-center border border-red-500 bg-red-500 max-w-max shadow-lg rounded-full">
                   <svg width="14" height="14">
                     {" "}
                   </svg>
-                </button>
+                </span>
               </div>
             ) : (
               <div className="flex justify-center items-center">
-                <button className="w-5 h-5 uppercase p-1 flex items-center border  border-red-500  max-w-max shadow-lg rounded-full">
+                <span className="w-5 h-5 uppercase p-1 flex items-center border  border-red-500  max-w-max shadow-lg rounded-full">
                   <svg width="14" height="14"></svg>
-                </button>
+                </span>
               </div>
             )}
             <div className="flex justify-center">
               <div>
                 <button
                   onClick={() => {
-                    clickRelayButton(relay, key);
+                    clickRelayButton(relay, key + 1);
                   }}
                   className="flex items-center border py-1 px-2 text-sm rounded-lg"
                 >

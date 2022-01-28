@@ -1,9 +1,7 @@
 import CurrentTime from "../components/currentTime";
-import RelaySwitch from "../components/switch";
 import VoltGauge from "../components/voltGauge";
 
 import { useEffect, useState } from "react";
-import Relay from "../components/relay";
 
 import useSWR from "swr";
 import StatusLED from "../components/status";
@@ -91,7 +89,6 @@ const ENDPOINT =
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const Home = () => {
-  const [response, setResponse] = useState("");
   const [hostJeonData, setHostJeonData] =
     useState<jsonDataProps[]>(tmphost2Server);
   const { data: receiveData, error } = useSWR(
@@ -114,7 +111,7 @@ const Home = () => {
 
   return (
     <div className="flex flex-col items-center text-white max-w-6xl mx-auto">
-      <h1 className=" text-2xl m-2">One Sound - Dashboard</h1>
+      <h1 className=" text-2xl m-2">OneSound - Dashboard</h1>
       <CurrentTime />
 
       {hostJeonData.map((device, key) => (
