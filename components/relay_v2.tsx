@@ -52,7 +52,7 @@ const NewRelay = ({ relays, ENDPOINT, device }: Prop) => {
               <div>
                 <button
                   onClick={() => {
-                    clickRelayButton(relay, key + 1);
+                    clickRelayButton(relay, key);
                   }}
                   className="flex items-center border py-1 px-2 text-sm rounded-lg"
                 >
