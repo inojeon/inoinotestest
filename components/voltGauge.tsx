@@ -33,17 +33,6 @@ const minMax: PropMinMax[] = [
   },
 ];
 
-// const valuePercentfilter = (value: number, max: number, min: number) => {
-//   if (value < max) {
-//     if (value > min) {
-//       return value;
-//     } else {
-//       return min;
-//     }
-//   } else {
-//     return max;
-//   }ㅊ
-// };
 const checkUnit = (id: string): { unit: string; title: string } => {
   const type = id.split("_")[0];
   if (type === "Voltage") {
@@ -75,6 +64,7 @@ const VoltGauge = ({ id, value }: Prop) => {
 
   const viewValue = value > max ? max : value < min ? min : value;
   const percent = (viewValue - min) / (max - min);
+
   return (
     <div className="flex flex-col items-center mb-2">
       <h1 className="text-2xl">{title}</h1>
@@ -84,6 +74,7 @@ const VoltGauge = ({ id, value }: Prop) => {
         formatTextValue={(val) => val + " " + unit}
         percent={percent}
         viewValue={value}
+        animate={false}
       />
     </div>
   );

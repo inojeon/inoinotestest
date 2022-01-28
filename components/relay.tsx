@@ -1,4 +1,5 @@
-import socketIOClient from "socket.io-client";
+import axios from "axios";
+import useSWR from "swr";
 
 type Prop = {
   relays: any[];
@@ -7,11 +8,21 @@ type Prop = {
 };
 
 const Relay = ({ relays, ENDPOINT, device }: Prop) => {
-  const socket = socketIOClient(ENDPOINT);
   const clickRelayButton = (relay: boolean, key: number) => {
-    socket.emit("relay_update", { device, order: key, value: relay });
-    // console.log(relay, key);
+    axios
+      .get(`${ENDPOINT}/api/update/`, {
+        params: {
+          // query string
+          device,
+          key,
+          value: relay,
+        },
+      })
+      .then((res) => {
+        console.log(res);
+      });
   };
+
   return (
     <table className="w-full divide-y border border-white m-2  table-auto">
       <thead>
@@ -42,16 +53,18 @@ const Relay = ({ relays, ENDPOINT, device }: Prop) => {
                 </div>
               )}
             </td>
-            <tr className="flex justify-center">
-              <button
-                onClick={() => {
-                  clickRelayButton(relay, key);
-                }}
-                className="flex items-center"
-              >
-                click
-              </button>
-            </tr>
+            <td className="flex justify-center">
+              <div>
+                <button
+                  onClick={() => {
+                    clickRelayButton(relay, key);
+                  }}
+                  className="flex items-center"
+                >
+                  click
+                </button>
+              </div>
+            </td>
           </tr>
         ))}
       </tbody>

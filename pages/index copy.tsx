@@ -2,6 +2,7 @@ import CurrentTime from "../components/currentTime";
 import RelaySwitch from "../components/switch";
 import VoltGauge from "../components/voltGauge";
 
+import socketIOClient from "socket.io-client";
 import { useEffect, useState } from "react";
 import Relay from "../components/relay";
 
@@ -77,42 +78,58 @@ type jsonDataProps = {
   Relay: boolean[];
 };
 
-const ENDPOINT =
-  "http://ec2-15-164-245-6.ap-northeast-2.compute.amazonaws.com:4001";
-// const ENDPOINT = "http://localhost:4001";
+// const ENDPOINT =
+//   "http://ec2-15-164-245-6.ap-northeast-2.compute.amazonaws.com:4001";
+const ENDPOINT = "http://localhost:4001";
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const Home = () => {
   const [response, setResponse] = useState("");
   const [hostJeonData, setHostJeonData] =
     useState<jsonDataProps[]>(tmphost2Server);
-  const { data: receiveData, error } = useSWR(
-    `${ENDPOINT}/api/monitoring`,
-    fetcher,
-    {
-      refreshInterval: 1000,
-    }
-  );
+  // const { data, error } = useSWR(ENDPOINT, fetcher);
+  const reloadDatas = () => {
+    const socket = socketIOClient(ENDPOINT);
+    socket.on("FromAPI", (data: string) => {
+      console.log(data);
+      setResponse(data);
+    });
+    // console.log(relay, key);
+  };
 
   useEffect(() => {
-    let datas;
-    if (receiveData) {
-      console.log(receiveData);
-      if (receiveData.ok) {
-        console.log(receiveData.datas);
-        setHostJeonData(receiveData.datas);
-      }
-    }
+    const timer = setInterval(() => {
+      // Creates an interval which will update the current data every minute
+      // This will trigger a rerender every component that uses the useDate hook.
+      reloadDatas();
+      // setResponse(new Date());
+      // console.log(response);
+    }, 500);
+    return () => {
+      clearInterval(timer); // Return a funtion to clear the timer so that it will stop being called on unmount
+    };
+  }, []);
 
-    // if (receiveData?.datas) {
-    //   datas = receiveData.datas;
-    //   console.log("datas");
-    //   console.log(JSON.parse(datas));
-    // }
+  // useEffect(() => {
+  //   const timerId = setTimeout(() => {
+  //     // do something ...
+  //     console.log("ttt");
+  //     console.log(response);
+  //     setResponse(response + 1);
+  //     // reloadDatas();
+  //     // console.log(data);
+  //   }, 1000);
+  //   // return () => clearTimeout(timerId);
 
-    return () => {};
-  }, [receiveData]);
+  //   // const socket = socketIOClient(ENDPOINT);
+  //   // socket.on("FromAPI", (data: string) => {
+  //   //   console.log(data);
+  //   //   setResponse(data);
+  //   //   // setHostJeonData(parseData);
+  //   // });
+  // }, []);
 
+  // console.log(device1);
   const alarmCheck = (alarm: number) => {
     let massage = "";
     switch (alarm) {
@@ -134,6 +151,7 @@ const Home = () => {
       case 5:
         massage = "습도 문제발생";
         break;
+
       default:
         massage = "알람 신호 이상";
         break;
@@ -202,9 +220,7 @@ const Home = () => {
           </div>
         </div>
       ))}
-      <div>
-        <p></p>
-      </div>
+      <div>{/* <p>{response}</p> */}</div>
     </div>
   );
 };
