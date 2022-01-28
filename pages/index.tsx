@@ -111,7 +111,7 @@ const Home = () => {
 
   return (
     <div className="flex flex-col items-center text-white max-w-6xl mx-auto">
-      <h1 className=" text-2xl m-2">OneSound - Dashboard</h1>
+      <h1 className=" text-2xl m-2">OneSoundTech - Dashboard</h1>
       <CurrentTime />
 
       {hostJeonData.map((device, key) => (
