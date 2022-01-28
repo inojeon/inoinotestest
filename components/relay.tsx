@@ -1,5 +1,4 @@
 import axios from "axios";
-import useSWR from "swr";
 
 type Prop = {
   relays: any[];
@@ -12,7 +11,6 @@ const Relay = ({ relays, ENDPOINT, device }: Prop) => {
     axios
       .get(`${ENDPOINT}/api/update/`, {
         params: {
-          // query string
           device,
           key,
           value: relay,

@@ -1,4 +1,6 @@
+import { useState } from "react";
 import GaugeChart from "react-gauge-chart";
+import useChangeWidthHeightSize from "./hooks/useChangeWidthHeightSize";
 type Prop = {
   id: string;
   value: number;
@@ -52,6 +54,8 @@ const checkUnit = (id: string): { unit: string; title: string } => {
 
 const VoltGauge = ({ id, value }: Prop) => {
   const { unit, title } = checkUnit(id);
+  const chartStyle = useChangeWidthHeightSize();
+
   const tmpMinMax = minMax.find((element) => element.unit === unit);
   let min, max;
   if (tmpMinMax) {
@@ -64,11 +68,16 @@ const VoltGauge = ({ id, value }: Prop) => {
 
   const viewValue = value > max ? max : value < min ? min : value;
   const percent = (viewValue - min) / (max - min);
+  // const chartStyle = {
+  //   height: 80,
+  //   width: 180,
+  // };
 
   return (
-    <div className="flex flex-col items-center mb-2">
-      <h1 className="text-2xl">{title}</h1>
+    <div className="flex flex-col items-center mb-2 justify-center">
+      <h1 className="text-2xl mb-2">{title}</h1>
       <GaugeChart
+        style={chartStyle}
         id={id}
         nrOfLevels={5}
         formatTextValue={(val) => val + " " + unit}

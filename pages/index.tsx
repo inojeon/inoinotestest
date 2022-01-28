@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import Relay from "../components/relay";
 
 import useSWR from "swr";
+import StatusLED from "../components/status";
+import NewRelay from "../components/relay_v2";
 
 const tmphost2Server = [
   {
@@ -16,6 +18,7 @@ const tmphost2Server = [
     LeakageCurrent: 0.0,
     Temperature: 0,
     Humidity: 0,
+    FireStatus: false,
     Alarm: 1,
     Relay: [true, false, true, false, false],
   },
@@ -27,6 +30,7 @@ const tmphost2Server = [
     LeakageCurrent: 0.0,
     Temperature: 0,
     Humidity: 0,
+    FireStatus: false,
     Alarm: 0,
     Relay: [false, false, false, false, false],
   },
@@ -38,6 +42,7 @@ const tmphost2Server = [
     LeakageCurrent: 0.0,
     Temperature: 0,
     Humidity: 0,
+    FireStatus: false,
     Alarm: 0,
     Relay: [false, false, false, false, false],
   },
@@ -49,6 +54,7 @@ const tmphost2Server = [
     LeakageCurrent: 0.0,
     Temperature: 0,
     Humidity: 0,
+    FireStatus: false,
     Alarm: 0,
     Relay: [false, false, false, false, false],
   },
@@ -60,6 +66,7 @@ const tmphost2Server = [
     LeakageCurrent: 0.0,
     Temperature: 0,
     Humidity: 0,
+    FireStatus: false,
     Alarm: 0,
     Relay: [false, false, false, false, false],
   },
@@ -74,6 +81,7 @@ type jsonDataProps = {
   Temperature: number;
   Humidity: number;
   Alarm: number;
+  FireStatus: boolean;
   Relay: boolean[];
 };
 
@@ -95,105 +103,71 @@ const Home = () => {
   );
 
   useEffect(() => {
-    let datas;
     if (receiveData) {
-      console.log(receiveData);
       if (receiveData.ok) {
-        console.log(receiveData.datas);
+        // console.log(receiveData.datas);
         setHostJeonData(receiveData.datas);
       }
     }
-
-    // if (receiveData?.datas) {
-    //   datas = receiveData.datas;
-    //   console.log("datas");
-    //   console.log(JSON.parse(datas));
-    // }
-
     return () => {};
   }, [receiveData]);
 
-  const alarmCheck = (alarm: number) => {
-    let massage = "";
-    switch (alarm) {
-      case 0:
-        massage = "알람이 없습니다";
-        break;
-      case 1:
-        massage = "전압 문제발생";
-        break;
-      case 2:
-        massage = "현재전류 문제발생";
-        break;
-      case 3:
-        massage = "누설전류 문제발생";
-        break;
-      case 4:
-        massage = "온도 문제발생";
-        break;
-      case 5:
-        massage = "습도 문제발생";
-        break;
-      default:
-        massage = "알람 신호 이상";
-        break;
-    }
-    return massage;
-  };
-
   return (
-    <div className="flex flex-col items-center text-white">
+    <div className="flex flex-col items-center text-white max-w-6xl mx-auto">
       <h1 className=" text-2xl m-2">One Sound - Dashboard</h1>
       <CurrentTime />
 
       {hostJeonData.map((device, key) => (
         <div
-          className="m-2 border-2 w-full grid grid-cols-2 border-slate-300 border-b-2"
+          className="m-2 border-2 w-full grid grid-cols-2 border-slate-300 border-b-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-6"
           key={key}
         >
           {/* <div className="mx-4 my-2 col-span-2 ">
             <h1 className="text-3xl mb-2">{device.device}</h1>
           </div> */}
-          <div className="mx-4 col-span-1 mt-2">
+          <div className="mx-4 col-span-1 mt-2 sm:row-span-2">
             <h1 className="text-2xl mb-2">{device.device}</h1>
-            <h2 className="text-md mb-2">
-              {" "}
-              통신상태 : {device.CommStatus ? "에러" : "정상"}
-            </h2>
-            <h2 className="text-md mb-2"> 알람 : {alarmCheck(device.Alarm)}</h2>
+
+            <div className="flex gap-x-2 items-center">
+              <h2 className="text-md"> 통신상태</h2>
+              <StatusLED status={device.CommStatus} />
+            </div>
+            <div className="flex gap-x-2 items-center">
+              <h2 className="text-md"> 화재경보</h2>
+              <StatusLED status={device.FireStatus} />
+            </div>
           </div>
 
-          <div className="mt-2">
+          <div className="mt-2 ">
             <VoltGauge id={`Voltage_${device.device}`} value={device.Voltage} />
           </div>
-          <div className="">
+          <div className="mt-2">
             <VoltGauge
               id={`ConsumptionCurrent_${device.device}`}
               value={device.ConsumptionCurrent}
             />
           </div>
-          <div className="">
+          <div className="mt-2">
             <VoltGauge
               id={`LeakageCurrent_${device.device}`}
               value={device.LeakageCurrent}
             />
           </div>
-          <div className="">
+          <div className="mt-2">
             <VoltGauge
               id={`Temperature_${device.device}`}
               value={device.Temperature}
             />
           </div>
-          <div className="">
+          <div className="mt-2">
             <VoltGauge
               id={`Humidity_${device.device}`}
               value={device.Humidity}
             />
           </div>
-          <div className="col-span-2">
-            <h1 className="text-2xl text-center p-2">Relay</h1>
+          <div className="col-span-2 sm:col-span-4 mt-2 md:col-span-6 lg:col-span-6">
             <div className="w-full flex">
-              <Relay
+              <NewRelay
                 relays={device.Relay}
                 ENDPOINT={ENDPOINT}
                 device={device.device}
