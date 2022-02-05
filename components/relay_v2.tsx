@@ -9,7 +9,7 @@ type Prop = {
 const NewRelay = ({ relays, ENDPOINT, device }: Prop) => {
   const clickRelayButton = (relay: boolean, key: number) => {
     axios
-      .get(`${ENDPOINT}/api/update/`, {
+      .get(`/api/update/`, {
         params: {
           device,
           key,

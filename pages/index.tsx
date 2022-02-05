@@ -25,7 +25,7 @@ const Home = () => {
   useEffect(() => {
     const token = localStorage.getItem(LOCALSTORAGE_TOKEN);
     axios
-      .get(`${ENDPOINT}/api/me/`, {
+      .get(`/api/me/`, {
         headers: { "x-jwt": token || "" },
       })
       .then((res) => {
@@ -40,7 +40,7 @@ const Home = () => {
   const onSubmit: SubmitHandler<IFormInput> = (data) => {
     const { id, password } = data;
     axios
-      .get(`${ENDPOINT}/api/login/`, {
+      .get(`/api/login/`, {
         params: {
           id,
           password,

@@ -101,13 +101,9 @@ const Dashboard = () => {
 
   const [hostJeonData, setHostJeonData] =
     useState<jsonDataProps[]>(tmphost2Server);
-  const { data: receiveData, error } = useSWR(
-    `${ENDPOINT}/api/monitoring`,
-    fetcher,
-    {
-      refreshInterval: 500,
-    }
-  );
+  const { data: receiveData, error } = useSWR(`/api/monitoring`, fetcher, {
+    refreshInterval: 500,
+  });
 
   useEffect(() => {
     setToken(localStorage.getItem(LOCALSTORAGE_TOKEN) || "");
