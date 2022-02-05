@@ -109,6 +109,11 @@ app.prepare().then(() => {
     return;
   });
 
+  server.get("/host/updateAllData", (req, res) => {
+    datas = req.query.datas;
+    res.json({ ok: true });
+  });
+
   server.get("/", (req, res) => {
     return app.render(req, res, "/");
   });
@@ -160,4 +165,4 @@ tcpserver.on("close", function () {
   console.log("Server closed");
 });
 
-tcpserver.listen(5005, () => console.log(`Listening TCP on port 5005`));
+// tcpserver.listen(5005, () => console.log(`Listening TCP on port 5005`));
