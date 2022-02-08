@@ -38,7 +38,7 @@ app.prepare().then(() => {
 
   server.get("/api/login", (req, res) => {
     const { id, password } = req.query;
-    console.log(id, password);
+    // console.log(id, password);
     if (admin.id === id && admin.password === password) {
       const token = jwt.sign({ id }, PRIVATE_KEY, {
         algorithm: "HS256",
@@ -73,7 +73,7 @@ app.prepare().then(() => {
   });
 
   server.get("/api/update", (req, res) => {
-    console.log(req.query);
+    // console.log(req.query);
 
     res.json({ ok: true });
     recvData = req.query;
@@ -110,7 +110,7 @@ app.prepare().then(() => {
       return;
     }
 
-    console.log(datas);
+    // console.log(datas);
     let { datas: newDatas } = JSON.parse(datas);
     count = count + 1;
     res.json({ ok: true, datas: newDatas });

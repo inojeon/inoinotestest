@@ -59,7 +59,6 @@ const Home = () => {
       <div className="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-slate-900">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <div className="text-white">
-            <h1 className="text-center">admin : 1234</h1>
             {/* {isLoading ? "Loading.." : <h1 className="text-5xl">{user}</h1>} */}
           </div>
           <div className="flex flex-col justify-center items-center">
