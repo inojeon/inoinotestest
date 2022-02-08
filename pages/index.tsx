@@ -3,7 +3,6 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { ENDPOINT } from "./dashboard";
 
 export const LOCALSTORAGE_TOKEN = "oneSound-token";
 

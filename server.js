@@ -13,6 +13,7 @@ require("dotenv").config();
 
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 const EXPIRATION_TIME = process.env.EXPIRATION_TIME;
+const HOSTKEY = process.env.HOSTKEY;
 
 const admin = {
   id: process.env.ADMIN,
@@ -22,6 +23,13 @@ let datas = "";
 let count = 0;
 let recvData = "";
 let tpcinterval;
+let hostKey;
+
+let hostExfiredDate;
+
+const addMinutes = (date, minutes) => {
+  return new Date(date.getTime() + minutes * 60000);
+};
 
 app.prepare().then(() => {
   const server = express();
@@ -109,9 +117,63 @@ app.prepare().then(() => {
     return;
   });
 
-  server.get("/host/updateAllData", (req, res) => {
-    datas = req.query.datas;
-    res.json({ ok: true });
+  server.get("/host/login", (req, res) => {
+    const { host } = req.query;
+    if (host === HOSTKEY) {
+      hostKey = require("uuid/v4").uuidv4();
+
+      hostExfiredDate = addMinutes(new Date(), 1);
+      res.json({ ok: true, key: uuidv4 });
+    } else {
+      res.json({ ok: false });
+    }
+  });
+  server.get("/host/logout", (req, res) => {
+    const { host } = req.query;
+    if (host === HOSTKEY) {
+      hostKey = require("uuid/v4").uuidv4();
+      res.json({ ok: true });
+    } else {
+      res.json({ ok: false });
+    }
+  });
+
+  server.get("/host/getRelayInfo", (req, res) => {
+    const { key } = req.query;
+    if (hostKey === key) {
+      if (hostExfiredDate < new Date()) {
+        res.json({
+          ok: false,
+          message: "The host key has expired. Please log in again.",
+        });
+        return;
+      }
+      hostExfiredDate = addMinutes(new Date(), 1);
+      datas = req_datas;
+      res.json({ ok: true });
+    } else {
+      res.json({ ok: false, message: "Invalid hostkey" });
+    }
+    return;
+  });
+
+  server.get("/host/putAllData", (req, res) => {
+    const { key, datas: req_datas } = req.query;
+    if (hostKey === key) {
+      if (hostExfiredDate < new Date()) {
+        res.json({
+          ok: false,
+          message: "The host key has expired. Please log in again.",
+        });
+        return;
+      }
+      hostExfiredDate = addMinutes(new Date(), 1);
+      datas = req_datas;
+      res.json({ ok: true });
+    } else {
+      res.json({ ok: false, message: "Invalid hostkey" });
+    }
+    return;
   });
 
   server.get("/", (req, res) => {
@@ -165,4 +227,4 @@ tcpserver.on("close", function () {
   console.log("Server closed");
 });
 
-// tcpserver.listen(5005, () => console.log(`Listening TCP on port 5005`));
+tcpserver.listen(5005, () => console.log(`Listening TCP on port 5005`));

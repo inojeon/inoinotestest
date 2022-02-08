@@ -2,11 +2,10 @@ import axios from "axios";
 
 type Prop = {
   relays: any[];
-  ENDPOINT: string;
   device: string;
 };
 
-const NewRelay = ({ relays, ENDPOINT, device }: Prop) => {
+const NewRelay = ({ relays, device }: Prop) => {
   const clickRelayButton = (relay: boolean, key: number) => {
     axios
       .get(`/api/update/`, {

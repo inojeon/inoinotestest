@@ -87,8 +87,8 @@ type jsonDataProps = {
   Relay: boolean[];
 };
 
-export const ENDPOINT =
-  "http://ec2-15-164-245-6.ap-northeast-2.compute.amazonaws.com:4001";
+// export const ENDPOINT =
+//   "http://ec2-15-164-245-6.ap-northeast-2.compute.amazonaws.com:4001";
 // "http://localhost:4001";
 
 const Dashboard = () => {
@@ -213,11 +213,7 @@ const Dashboard = () => {
                   </div>
                   <div className="col-span-2 sm:col-span-4 mt-2 md:col-span-6 lg:col-span-6">
                     <div className="w-full flex">
-                      <NewRelay
-                        relays={device.Relay}
-                        ENDPOINT={ENDPOINT}
-                        device={device.device}
-                      />
+                      <NewRelay relays={device.Relay} device={device.device} />
                     </div>
                   </div>
                 </div>
