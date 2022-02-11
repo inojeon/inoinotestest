@@ -8,6 +8,7 @@ const dev = process.env.NODE_ENV !== "production";
 const app = next({ dev });
 const handle = app.getRequestHandler();
 const jwt = require("jsonwebtoken");
+const { v4: uuidv4 } = require("uuid");
 
 require("dotenv").config();
 
@@ -96,14 +97,12 @@ app.prepare().then(() => {
       return;
     }
 
-    // let decoded = "";
     jwt.verify(token, PRIVATE_KEY, (err, decoded) => {
       if (err) {
         res.json({ ok: false, message: "JWTExpired" });
         return;
       }
     });
-    // console.log(decoded);
     if (datas === "") {
       console.log("Data Not Updated.");
       res.json({ ok: false, message: "DataNotUpdated" });
@@ -111,7 +110,7 @@ app.prepare().then(() => {
     }
 
     // console.log(datas);
-    let { datas: newDatas } = JSON.parse(datas);
+    let { datas: newDatas } = datas;
     count = count + 1;
     res.json({ ok: true, datas: newDatas });
     return;
@@ -120,22 +119,53 @@ app.prepare().then(() => {
   server.get("/host/login", (req, res) => {
     const { host } = req.query;
     if (host === HOSTKEY) {
-      hostKey = require("uuid/v4").uuidv4();
-
+      hostKey = uuidv4();
       hostExfiredDate = addMinutes(new Date(), 1);
-      res.json({ ok: true, key: uuidv4 });
+      res.json({ ok: true, key: hostKey });
     } else {
       res.json({ ok: false });
     }
   });
+
+  server.post("/host/login", (req, res) => {
+    const { host } = req.body;
+    if (host === HOSTKEY) {
+      hostKey = uuidv4();
+      hostExfiredDate = addMinutes(new Date(), 1);
+      res.json({ ok: true, key: hostKey });
+    } else {
+      res.json({ ok: false });
+    }
+  });
+
   server.get("/host/logout", (req, res) => {
     const { host } = req.query;
     if (host === HOSTKEY) {
-      hostKey = require("uuid/v4").uuidv4();
+      hostKey = uuidv4();
       res.json({ ok: true });
     } else {
       res.json({ ok: false });
     }
+  });
+
+  server.post("/host/logout", (req, res) => {
+    const key = req.headers["authorization"];
+    const { host } = req.body;
+    if (!key) {
+      res.json({ ok: false, message: "Hostkey doesn't existed" });
+      return;
+    }
+    if (hostKey === key) {
+      if (host === HOSTKEY) {
+        hostKey = uuidv4();
+        res.json({ ok: true });
+      } else {
+        res.json({ ok: false, message: "HOST does not match." });
+      }
+    } else {
+      res.json({ ok: false, message: "HOSTKEY does not match." });
+    }
+    return;
   });
 
   server.get("/host/getRelayInfo", (req, res) => {
@@ -157,8 +187,38 @@ app.prepare().then(() => {
     return;
   });
 
-  server.get("/host/putAllData", (req, res) => {
-    const { key, datas: req_datas } = req.query;
+  server.post("/host/getRelayInfo", (req, res) => {
+    const key = req.headers["authorization"];
+    if (!key) {
+      res.json({ ok: false, message: "Hostkey doesn't existed" });
+      return;
+    }
+
+    if (hostKey === key) {
+      if (hostExfiredDate < new Date()) {
+        res.json({
+          ok: false,
+          message: "The host key has expired. Please log in again.",
+        });
+        return;
+      }
+      hostExfiredDate = addMinutes(new Date(), 1);
+      datas = req_datas;
+      res.json({ ok: true });
+    } else {
+      res.json({ ok: false, message: "Invalid hostkey" });
+    }
+    return;
+  });
+
+  server.post("/host/putAllData", (req, res) => {
+    const key = req.headers["authorization"];
+    const req_datas = req.body;
+    if (!key) {
+      res.json({ ok: false, message: "Hostkey doesn't existed" });
+      return;
+    }
+
     if (hostKey === key) {
       if (hostExfiredDate < new Date()) {
         res.json({
@@ -190,41 +250,41 @@ app.prepare().then(() => {
   });
 });
 
-const tcpserver = net.createServer(function (socket) {
-  // connection event
-  console.log("클라이언트 접속");
-  socket.write("Welcome to Socket Server");
+// const tcpserver = net.createServer(function (socket) {
+//   // connection event
+//   console.log("클라이언트 접속");
+//   socket.write("Welcome to Socket Server");
 
-  socket.on("data", function (chunk) {
-    console.log("클라이언트가 보냄");
-    preDatas = datas;
-    datas = chunk.toString();
-  });
+//   socket.on("data", function (chunk) {
+//     console.log("클라이언트가 보냄");
+//     preDatas = datas;
+//     datas = chunk.toString();
+//   });
 
-  socket.on("end", function () {
-    console.log("클라이언트 접속 종료");
-  });
+//   socket.on("end", function () {
+//     console.log("클라이언트 접속 종료");
+//   });
 
-  if (tpcinterval) {
-    clearInterval(tpcinterval);
-  }
+//   if (tpcinterval) {
+//     clearInterval(tpcinterval);
+//   }
 
-  tpcinterval = setInterval(() => sendRelayData(socket), 100);
-});
+//   tpcinterval = setInterval(() => sendRelayData(socket), 100);
+// });
 
-const sendRelayData = (socket) => {
-  if (recvData === "") return;
-  socket.write(JSON.stringify(recvData));
-  recvData = "";
-};
+// const sendRelayData = (socket) => {
+//   if (recvData === "") return;
+//   socket.write(JSON.stringify(recvData));
+//   recvData = "";
+// };
 
-tcpserver.on("listening", function () {
-  console.log("Server is listening");
-});
+// tcpserver.on("listening", function () {
+//   console.log("Server is listening");
+// });
 
-tcpserver.on("close", function () {
-  clearInterval(interval);
-  console.log("Server closed");
-});
+// tcpserver.on("close", function () {
+//   clearInterval(interval);
+//   console.log("Server closed");
+// });
 
-tcpserver.listen(5005, () => console.log(`Listening TCP on port 5005`));
+// tcpserver.listen(5005, () => console.log(`Listening TCP on port 5005`));
